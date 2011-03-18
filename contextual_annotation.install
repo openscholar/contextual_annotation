@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * Implementation of hook_install().
+ */
+function contextual_annotation_install() {
+  drupal_install_schema('contextual_annotation');
+  
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function contextual_annotation_uninstall() {
+  drupal_uninstall_schema('contextual_annotation');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function contextual_annotation_schema() {
+  $schema['contextual_annotation'] = array(
+    'description' => t('contextual annotation lookup table for nodes.'),
+    'fields' => array(
+      'annotation_key' => array(
+        'description' => t('The key that defines the context, ie("context section-sub-value" or "Term ID" or "Vocabulary ID")'),
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'annotation_type' => array(
+        'description' => t('The method to match on id usually the module name contexts, taxonomy.'),
+        'type' => 'varchar',
+        'length' => 63,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'nid' => array(
+        'description' => t('The nid of the related node.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+     'annotation' => array(
+        'description' => 'The body of the annotation.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+      ),
+      'position' => array(
+        'description' => t('Location of the annotation. ie("prefix","suffix")'),
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => 'prefix',
+      ),
+    ),
+    'primary key' => array('nid', 'annotation_key', 'annotation_type'),
+  );
+
+  return $schema;
+}
