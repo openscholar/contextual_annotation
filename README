@@ -1,0 +1,9 @@
+Allows contextual notes to be placed "around" node teasers on a given a page, context or other defined constraint. 
+
+Examples of constraints include. 
+* Viewing Vocabulary "Article Types"
+* Viewing Term "Papers"
+* Context "Publication" is active
+
+This is useful if you would like to "introduce" or "add to" a teaser differently in different contexts.  For example a publication could be tagged in two different subject matters. And when looking at the subject matter specific pages an introduction about the importance or relivance is sometimes needed.
+
