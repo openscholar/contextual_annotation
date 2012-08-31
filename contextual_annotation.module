@@ -152,7 +152,7 @@ function contextual_annotation_ctools_plugin_type() {
 
 
 /**
- * Implementation of hook_purl_processor().
+ * Implementation of hook_contextual_annotation_type().
  */
 function contextual_annotation_contextual_annotation_type() {
   
