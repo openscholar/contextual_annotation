@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Implemetns hook_nodeapi
+ * 
+ * Adds the annotation to the rendered node object if the current context has an annotation
+ */
 function contextual_annotation_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
 
   switch ($op) {
@@ -50,7 +55,7 @@ function contextual_annotation_menu() {
 }
 
 /**
- * A modal form callback.
+ * A modal form callback to set the annotation
  */
 function contextual_annotation_annotate_form($js = NULL, $nid = NULL, $type = NULL, $key = NULL) {
 	
@@ -81,7 +86,7 @@ function contextual_annotation_annotate_form($js = NULL, $nid = NULL, $type = NU
 }
 
 /**
- * Post-submit processor
+ * Post-submit processor 
  */
 function contextual_annotation_annotate_form_success($js, $action) {
   if (!$js) {
@@ -98,7 +103,10 @@ function contextual_annotation_annotate_form_success($js, $action) {
 
 
 /**
- * Implementation of hook_scholar_admin_link() on behalf of the node module.
+ * Implementation of hook_vsite_admin_link() on behalf of the node module.
+ * 
+ * @todo this relies on an openscholar specific hook to add the contextual link, use a standard 
+ * contextual link callback when upgrading to Drupal 7
  */
 function contextual_annotation_vsite_admin_link($type, $object) {
   $links = array();
