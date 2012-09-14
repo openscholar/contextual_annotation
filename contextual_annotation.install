@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Provides any required installation or upgrade path requirements.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function contextual_annotation_schema() {
+  $schema = array();
+  $schema['contextual_annotation'] = array(
+    'description' => t('contextual annotation lookup table for nodes.'),
+    'fields' => array(
+      'annotation_key' => array(
+        'description' => t('The key that defines the context in which to display the annotation'),
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'nid' => array(
+        'description' => t('The nid of the related node.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+     'annotation' => array(
+        'description' => 'The body of the annotation.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+      ),
+      'position' => array(
+        'description' => t('Location of the annotation. ie("prefix","suffix")'),
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => 'prefix',
+      ),
+    ),
+    'primary key' => array('nid', 'annotation_key'),
+    'indexes' => array(
+      'nid' => array('nid')
+    ),
+  );
+
+  return $schema;
+}
