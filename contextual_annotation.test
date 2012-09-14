@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * @file
+ * Test cases for contextual_annotation
+ */
+
+class ContextualAnnotationTestCase extends DrupalWebTestCase {
+
+  protected $privileged_user;
+  protected $contextual_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Contextual Annotation',
+      'description' => 'Contextual annotation test case',
+      'group' => 'Contextual Annotation',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('contextual_annotation'));
+
+    $this->privileged_user = $this->drupalCreateUser(array('administer content types', 'edit own page content', 'administer comments', 'create article content'));
+    $this->contextual_user = $this->drupalCreateUser(array('access contextual links', 'edit own page content', 'administer comments', 'create article content'));
+    $this->drupalLogin($this->privileged_user);
+
+    $t = new stdClass();
+    $t->name = 'apples';
+    $t->vid = 1;
+    taxonomy_term_save($t);
+    $t = new stdClass();
+    $t->name = 'bananas';
+    $t->vid = 1;
+    taxonomy_term_save($t);
+
+    $settings = array(
+      'title' => 'An apple node',
+      'body[und][0][value]' => 'I really love apples',
+      'field_tags[und]' => 'apples, bananas',
+    );
+    $this->drupalPost("node/add/article", $settings, t("Save"));
+
+  }
+
+  public function testContextualAnnotationPublicUserDoesNotSeeContextualLink() {
+    $this->drupalGet("taxonomy/term/1");
+    $this->assertRaw("apples");
+    $this->assertNoRaw("Edit contextual note for term");
+  }
+
+  public function testContextualAnnotationEditorSeesContextualLink() {
+    $this->drupalLogin($this->contextual_user);
+    $this->drupalGet("taxonomy/term/1");
+    $this->assertRaw("apples");
+    $this->assertRaw("Edit Contextual Note for Term");
+    $this->drupalGet("taxonomy/term/2");
+    $this->assertRaw("bananas");
+    $this->assertRaw("Edit Contextual Note for Term");
+  }
+
+  public function testContextualAnnotationAddAnnotation() {
+    $this->drupalLogin($this->contextual_user);
+
+    $settings = array(
+      'annotation' => 'Doctor away',
+      'position' => 'prefix',
+    );
+    $this->drupalPost("contextual_annotation/nojs/annotate/tid-1/1", $settings, t("Save"));
+
+    $settings = array(
+      'annotation' => 'Are you just happy to see me?',
+      'position' => 'suffix',
+    );
+    $this->drupalPost("contextual_annotation/nojs/annotate/tid-2/1", $settings, t("Save"));
+
+    $this->drupalGet("taxonomy/term/1");
+    $this->assertRaw("Doctor away");
+    $this->assertNoRaw("happy to see me");
+
+    $this->drupalGet("taxonomy/term/2");
+    $this->assertNoRaw("Doctor away");
+    $this->assertRaw("happy to see me");
+  }
+
+}
+
