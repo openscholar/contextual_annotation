@@ -1,0 +1,5 @@
+name = Contextual Annotation
+description = "Provides contextual annotations for nodes"
+core = 7.x
+files[] = contextual_annotation.test
+dependencies[] = ctools
