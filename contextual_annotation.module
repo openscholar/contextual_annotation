@@ -76,6 +76,7 @@ function contextual_annotation_menu() {
       'page callback' => 'contextual_annotation_annotate_form',
       'page arguments' => array(1),
       'access callback' => TRUE,
+      'type' => MENU_CALLBACK
   );
   $items['contextual_annotation/%ctools_js/annotate/%/%'] = array(
       'title' => 'Edit Contextual Note for Term',
