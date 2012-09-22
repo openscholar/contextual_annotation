@@ -142,7 +142,7 @@ function contextual_annotation_annotate_form_success($js, $action) {
  * @ingroup forms
  * @see taxonomy_form_term_submit()
  */
-function contextual_annotation_edit(&$form_state, $edit = array()) {
+function contextual_annotation_edit($form_state, $edit = array()) {
   $key = (isset($edit['build_info']['args'][0]['key'])) ? $edit['build_info']['args'][0]['key'] : $edit['key'];
   $nid = (isset($edit['build_info']['args'][0]['nid'])) ? $edit['build_info']['args'][0]['nid'] : $edit['nid'];
 
