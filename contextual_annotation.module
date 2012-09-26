@@ -142,28 +142,29 @@ function contextual_annotation_annotate_form_success($js, $action) {
  * @ingroup forms
  * @see taxonomy_form_term_submit()
  */
-function contextual_annotation_edit($form_state, $edit = array()) {
-  $key = (isset($edit['build_info']['args'][0]['key'])) ? $edit['build_info']['args'][0]['key'] : $edit['key'];
-  $nid = (isset($edit['build_info']['args'][0]['nid'])) ? $edit['build_info']['args'][0]['nid'] : $edit['nid'];
+function contextual_annotation_edit($form, $form_state, $edit = array()) {
 
-  $o_annotation = contextual_annotation_get_annotation($key, $nid);
-  $edit += array(
-    'key' => $key,
-    'nid' => $nid,
+  if (isset($edit['key']))
+    $form_state['key'] = $edit['key'];
+  if (isset($edit['nid']))
+    $form_state['nid'] = $edit['nid'];
+
+  $o_annotation = contextual_annotation_get_annotation($form_state['key'], $form_state['nid']);
+  $form_state += array(
     'annotation' => ($o_annotation) ? $o_annotation['annotation'] : NULL,
     'position' => ($o_annotation) ? $o_annotation['position'] : NULL,
   );
   $form['annotation'] = array(
     '#type' => 'textarea',
     '#title' => t('Annotation'),
-    '#default_value' => $edit['annotation'],
+    '#default_value' => $form_state['annotation'],
     '#maxlength' => 1024,
     '#required' => FALSE);
 
   $form['position'] = array(
     '#type' => 'select',
     '#title' => t('Position'),
-    '#default_value' => $edit['position']?$edit['position']:'prefix',
+    '#default_value' => $form_state['position'] ? $form_state['position'] : 'prefix',
     '#options' => array(
       'prefix' => t('Before the Teaser'),
       'suffix' => t('After the Teaser'),
@@ -172,11 +173,11 @@ function contextual_annotation_edit($form_state, $edit = array()) {
 
   $form['nid'] = array(
     '#type' => 'value',
-    '#value' => $edit['nid']);
+    '#value' => $form_state['nid']);
 
   $form['key'] = array(
     '#type' => 'value',
-    '#value' => $edit['key']);
+    '#value' => $form_state['key']);
 
   $form['submit'] = array(
     '#type' => 'submit',
